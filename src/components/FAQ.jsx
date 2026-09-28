@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { Plus } from '@phosphor-icons/react'
 import { FAQ } from '../data.js'
 
 export default function FAQSection() {
@@ -12,7 +13,6 @@ export default function FAQSection() {
     <section id="faq" className="section section--alt">
       <div className="container">
         <div className="section-head center">
-          <span className="eyebrow">Good to know</span>
           <h2>FAQ's</h2>
         </div>
 
@@ -25,7 +25,9 @@ export default function FAQSection() {
             >
               <summary>
                 {item.question}
-                <span className="faq-chevron">+</span>
+                <span className="faq-chevron" aria-hidden="true">
+                  <Plus size={14} weight="bold" />
+                </span>
               </summary>
               <div className="faq-answer">
                 {Array.isArray(item.answer) ? (

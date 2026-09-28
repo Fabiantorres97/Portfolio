@@ -44,7 +44,7 @@ export const SERVICES = [
 ]
 
 export const JOURNEY = {
-  eyebrow: 'How did I learn all of this?',
+  question: 'How did I learn all of this?',
   heading: 'My Journey',
   paragraphs: [
     "I'm a bilingual (Spanish-English) Virtual/Project Assistant specialized in operations, regulatory compliance, procurement, and budget control. My professional path started in the aviation industry (where error is not an option) managing parts and documentation under strict regulatory standards at Avianca. From there, I built a solid foundation in precision, confidentiality, and process compliance, which I later applied to bilingual customer support with a KPI focus (Concentrix), administrative and vendor/budget management (Du Brands), and a fully remote interpreting role (Teleperformance), consistently delivering results with minimal supervision. I also hold certified training in AI fluency (Anthropic), which allows me to integrate these tools into administrative workflows critically and responsibly.",
@@ -160,11 +160,11 @@ export const CERTIFICATIONS = [
 ]
 
 export const WORK_SAMPLES_DISCLAIMER =
-  'These are some simulated examples — created to demonstrate my working methodology. Not tied to a real client engagement.'
+  'These are some simulated examples, created to demonstrate my working methodology. Not tied to a real client engagement.'
 
 export const ASANA_PRACTICE = {
   title: 'Asana in Practice: Procurement, Onboarding & Event Delivery',
-  cover: '/asana-practice-cover.png',
+  cover: { src: '/asana-practice-cover.webp', w: 1200, h: 800 },
   paragraphs: [
     'These three projects show how I actually work, not just what I claim to know. The tracker keeps vendors and budget visible. The onboarding process turns that into a repeatable system for every new client, an ongoing workflow with no fixed end date. The launch event shows the other side: a deadline-bound workflow, where the same discipline holds up under time pressure, backed by a client intake form and one automation that keeps status accurate without manual upkeep.',
     'Together, they show procurement, budget control, and real fluency across Asana: fields, dependencies, forms, and rules, applied to two very different kinds of work.',
@@ -177,8 +177,8 @@ export const EMAIL_SAMPLE = {
   badge: 'Real result',
   paragraph:
     'A messy inbox slows everyone down. Before: over 15,000 unread emails with no structure. After: inbox zero, with a clear label system in place for ongoing classification. A simple before-and-after that reflects how I bring order to everyday communication, not just big projects.',
-  before: { src: '/gmail-before.png', alt: 'Gmail inbox before — over 15,000 unread, unlabeled emails' },
-  after: { src: '/gmail-after.png', alt: 'Gmail inbox after — organized inbox zero with labels' },
+  before: { src: '/gmail-before.webp', w: 1600, h: 724, alt: 'Gmail inbox before: over 15,000 unread, unlabeled emails' },
+  after: { src: '/gmail-after.webp', w: 1600, h: 731, alt: 'Gmail inbox after: organized inbox zero with labels' },
 }
 
 export const PROJECT_SUMMARY = [
@@ -186,8 +186,8 @@ export const PROJECT_SUMMARY = [
     id: 'tracker',
     title: 'Procurement & Budget Control Tracker',
     images: [
-      { src: '/tracker-screenshot-1.png', alt: 'Tracker main view with bar chart and status pie chart' },
-      { src: '/tracker-screenshot-2.png', alt: 'Vendor database detail-record view' },
+      { src: '/tracker-screenshot-1.webp', w: 1578, h: 692, alt: 'Tracker main view with bar chart and status pie chart' },
+      { src: '/tracker-screenshot-2.webp', w: 1600, h: 700, alt: 'Vendor database detail-record view' },
     ],
     paragraph:
       'This is meant to demonstrate how I manage vendors and budget control: tracking quotes, approval status, and deadlines side by side with allocated vs. actual spend. Includes a live formula for budget variance, plus visual breakdowns by spend and vendor status - the kind of clear, at-a-glance oversight I bring to keep operations organized and costs under control. Built to show methodology, not tied to a real client engagement.',
@@ -197,9 +197,9 @@ export const PROJECT_SUMMARY = [
     id: 'onboarding',
     title: 'Ongoing Client Onboarding Process',
     images: [
-      { src: '/onboarding-screenshot-1.png', alt: 'Task detail panel showing dependencies and custom fields' },
-      { src: '/onboarding-screenshot-2.png', alt: 'Onboarding timeline view' },
-      { src: '/onboarding-screenshot-3.png', alt: 'Onboarding board (Kanban) view' },
+      { src: '/onboarding-screenshot-1.webp', w: 1600, h: 664, alt: 'Task detail panel showing dependencies and custom fields' },
+      { src: '/onboarding-screenshot-2.webp', w: 1218, h: 792, alt: 'Onboarding timeline view' },
+      { src: '/onboarding-screenshot-3.webp', w: 1600, h: 699, alt: 'Onboarding board (Kanban) view' },
     ],
     paragraph:
       "Once vendors and budgets are under control, the next challenge is starting every new client off right - consistently, not just the first time. This is the exact process I follow, from discovery through vendor setup to a first-week check-in, built as a reusable template rather than a one-off. The screenshots show it in action: dependencies that keep tasks moving in the right sequence, custom fields (Department, Priority, Status, Client Contact Needed) that make progress easy to scan at a glance, and a short description on every task explaining not just what to do, but why it matters. It's the kind of system that keeps clients feeling looked after, even on a busy week.",
@@ -208,9 +208,9 @@ export const PROJECT_SUMMARY = [
     id: 'event',
     title: 'Client Product Launch Event',
     images: [
-      { src: '/event-screenshot-1.png', alt: 'Timeline/Gantt view with dependencies' },
-      { src: '/event-screenshot-2.png', alt: 'Client intake form' },
-      { src: '/event-screenshot-3.png', alt: 'Automation rule configuration — mark task status as Done' },
+      { src: '/event-screenshot-1.webp', w: 1206, h: 798, alt: 'Timeline/Gantt view with dependencies' },
+      { src: '/event-screenshot-2.webp', w: 907, h: 858, alt: 'Client intake form' },
+      { src: '/event-screenshot-3.webp', w: 1571, h: 532, alt: 'Automation rule configuration: mark task status as Done' },
     ],
     paragraph:
       'Once a client is onboarded and vendors are tracked, the real test is delivery under a deadline. This project simulates a full product launch event, run as a time-bound workflow with hard dates and dependencies. A client-facing intake form feeds the plan from day one, and an automation keeps status accurate by marking tasks Done the moment they are completed, so progress stays visible without manual updates.',
@@ -248,6 +248,6 @@ export const FAQ = [
   },
   {
     question: 'Why should I choose you over a more "generalist" virtual assistant?',
-    answer: "Because most Virtual Assistants can tell you they're organized while I can prove it. My discipline comes from aviation compliance, where I cleared an 8-month calibration backlog with zero shortcuts. I bring that same rigor to procurement and budget control today, backed by certified AI fluency, a real 15,000+ email inbox turned to zero, and a track record of sustaining 90%+ remote productivity for three consecutive bonus cycles. You're not hiring someone who claims to be detail-oriented — in fact, you're hiring someone who's already proven it, repeatedly, in environments where mistakes weren't an option.",
+    answer: "Because most Virtual Assistants can tell you they're organized while I can prove it. My discipline comes from aviation compliance, where I cleared an 8-month calibration backlog with zero shortcuts. I bring that same rigor to procurement and budget control today, backed by certified AI fluency, a real 15,000+ email inbox turned to zero, and a track record of sustaining 90%+ remote productivity for three consecutive bonus cycles. You're not hiring someone who claims to be detail-oriented. In fact, you're hiring someone who's already proven it, repeatedly, in environments where mistakes weren't an option.",
   },
 ]

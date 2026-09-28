@@ -8,12 +8,14 @@ import Certifications from './components/Certifications.jsx'
 import WorkSamples from './components/WorkSamples.jsx'
 import FAQSection from './components/FAQ.jsx'
 import Closing from './components/Closing.jsx'
+import { CONTACT } from './data.js'
 
 export default function App() {
   return (
     <>
+      <a href="#main" className="skip-link">Skip to content</a>
       <Nav />
-      <main>
+      <main id="main" tabIndex={-1}>
         <Hero />
         <Services />
         <Journey />
@@ -24,6 +26,9 @@ export default function App() {
         <FAQSection />
         <Closing />
       </main>
+      <footer className="site-footer">
+        Fabian Torres, Bilingual Virtual/Project Assistant. {CONTACT.location}
+      </footer>
     </>
   )
 }

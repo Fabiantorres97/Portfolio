@@ -33,14 +33,13 @@ npm run preview
 - `src/data.js` — todo el contenido de texto del portafolio (editar aquí para cambiar textos).
 - `src/components/` — un componente por sección de la página.
 - `src/index.css` — sistema de diseño completo (tokens de color, tipografía, espaciado) y estilos.
-- `vite.config.js` — configurado para servir las imágenes y el `tracker.xlsx` directamente desde
-  la carpeta `../assets` (no hay copias duplicadas de las imágenes dentro de `portfolio-site/`).
-  Si mueves esta carpeta, actualiza la ruta `publicDir` en ese archivo.
+- `public/`: imágenes (WebP optimizadas), favicon y `tracker.xlsx`. Se publican tal cual en la raíz del sitio.
+- `src/useInView.js`: hook que activa la animación del timeline al entrar en pantalla.
 
 ## Notas
 
-- La carpeta `public/` que pudiera existir dentro de `portfolio-site/` no se usa (el `publicDir`
-  real es `../assets`) — se puede borrar sin problema.
+- Fuentes auto-alojadas con @fontsource (Manrope y Plus Jakarta Sans) e iconos de @phosphor-icons/react.
+- Todas las animaciones respetan la preferencia del sistema "reducir movimiento".
 - El primer ítem del FAQ se abre por defecto; el resto son colapsables con `<details>`.
 - La tarjeta "Asana in Practice" abre un modal con el resumen de los 3 proyectos (tracker,
   onboarding, evento) y el enlace de descarga de `tracker.xlsx`.

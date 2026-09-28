@@ -1,20 +1,22 @@
 import { EXPERIENCE } from '../data.js'
+import useInView from '../useInView.js'
 
 export default function Experience() {
+  const [ref, inView] = useInView()
+
   return (
     <section id="experience" className="section container">
       <div className="section-head center">
-        <span className="eyebrow">Career path</span>
-        <h2>My work experience 💼</h2>
+        <h2>My work experience</h2>
       </div>
 
-      <div className="timeline">
-        {EXPERIENCE.map((job) => (
-          <div className="timeline-item" key={`${job.role}-${job.company}`}>
-            <span className="timeline-dot" />
+      <ol ref={ref} className={`timeline${inView ? ' is-visible' : ''}`}>
+        {EXPERIENCE.map((job, i) => (
+          <li className="timeline-item" key={`${job.role}-${job.company}`} style={{ '--i': i }}>
+            <span className="timeline-dot" aria-hidden="true" />
             <div className="timeline-head">
-              <span className="timeline-role">{job.role}</span>
-              <span className="timeline-company">— {job.company}</span>
+              <h3 className="timeline-role">{job.role}</h3>
+              <span className="timeline-company">{job.company}</span>
               <span className="timeline-period">{job.period}</span>
             </div>
             <ul className="dash-list">
@@ -22,9 +24,9 @@ export default function Experience() {
                 <li key={b}>{b}</li>
               ))}
             </ul>
-          </div>
+          </li>
         ))}
-      </div>
+      </ol>
     </section>
   )
 }
