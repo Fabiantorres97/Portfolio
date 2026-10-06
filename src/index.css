@@ -717,6 +717,27 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   cursor: zoom-in;
 }
 .shot-btn:focus-visible { outline-offset: -4px; }
+/* The email card does not clip, so a hovered shot can lift out of the frame.
+   Its corners are rounded here instead of by the card's overflow. */
+.sample-card--email { overflow: visible; }
+.before-after { border-radius: 0 0 var(--radius-card) var(--radius-card); }
+.before-after figure {
+  overflow: hidden;
+  transition:
+    transform 320ms var(--ease-out),
+    box-shadow 320ms var(--ease-out),
+    border-radius 320ms var(--ease-out);
+}
+.before-after figure:first-child { border-bottom-left-radius: var(--radius-card); }
+.before-after figure:last-child { border-bottom-right-radius: var(--radius-card); }
+@media (hover: hover) and (pointer: fine) {
+  .before-after figure:hover {
+    transform: scale(1.06);
+    z-index: 1;
+    border-radius: var(--radius-img);
+    box-shadow: var(--shadow-lg);
+  }
+}
 .before-after figcaption {
   pointer-events: none;
   position: absolute;
@@ -1136,7 +1157,8 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   .card:hover { transform: none; }
   .summary-shot:hover,
   .summary-shot:has(+ .summary-shot:hover),
-  .summary-shot:hover + .summary-shot { transform: none; }
+  .summary-shot:hover + .summary-shot,
+  .before-after figure:hover { transform: none; }
   .modal-panel { animation: overlay-in 160ms ease both; }
   .nav-drawer,
   .nav-drawer.open { transform: none; filter: none; }
@@ -1169,6 +1191,8 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   :root { --nav-offset: 84px; }
   .grid--3, .grid--4 { grid-template-columns: 1fr; }
   .before-after { grid-template-columns: 1fr; }
+  .before-after figure:first-child { border-bottom-left-radius: 0; }
+  .before-after figure:last-child { border-bottom-left-radius: var(--radius-card); }
   .timeline { padding-left: 26px; }
   .timeline-dot { left: -26px; }
   .timeline-period { margin-left: 0; flex-basis: 100%; order: -1; }
