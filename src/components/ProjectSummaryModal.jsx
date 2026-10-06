@@ -22,7 +22,7 @@ export default function ProjectSummaryModal({ onClose }) {
   // Safety net: unmount even if the exit animation never fires (background tab, animations disabled).
   useEffect(() => {
     if (!closing) return
-    const t = setTimeout(onClose, 260)
+    const t = setTimeout(onClose, 360)
     return () => clearTimeout(t)
   }, [closing, onClose])
 

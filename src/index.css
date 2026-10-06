@@ -48,8 +48,8 @@
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-  --dur-press: 160ms;
-  --dur-state: 220ms;
+  --dur-press: 220ms;
+  --dur-state: 310ms;
 
   /* Layout */
   --container: 1180px;
@@ -272,10 +272,16 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   color: var(--ink-secondary);
   padding: 10px 13px;
   border-radius: var(--radius-btn);
-  transition: background-color var(--dur-state) ease, color var(--dur-state) ease;
+  transition:
+    transform var(--dur-state) var(--ease-out),
+    background-color var(--dur-state) ease,
+    color var(--dur-state) ease;
 }
 @media (hover: hover) and (pointer: fine) {
-  .nav-links a:hover { background: var(--accent-wash); color: var(--accent-dark); }
+  /* Dock-style magnification, same idea as the project gallery */
+  .nav-links a:hover { background: var(--accent-wash); color: var(--accent-dark); transform: scale(1.14); }
+  .nav-links a:has(+ a:hover),
+  .nav-links a:hover + a { transform: scale(1.05); }
 }
 
 .nav-cta { display: flex; align-items: center; gap: 8px; }
@@ -303,7 +309,7 @@ section[id] { scroll-margin-top: var(--nav-offset); }
 }
 .nav-burger span {
   position: relative;
-  transition: background-color 120ms ease;
+  transition: background-color 170ms ease;
 }
 .nav-burger span::before,
 .nav-burger span::after {
@@ -339,10 +345,10 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   filter: blur(4px);
   visibility: hidden;
   transition:
-    opacity 160ms ease,
-    transform 160ms var(--ease-out),
-    filter 160ms ease,
-    visibility 0s linear 160ms;
+    opacity 220ms ease,
+    transform 220ms var(--ease-out),
+    filter 220ms ease,
+    visibility 0s linear 220ms;
 }
 .nav-drawer.open {
   opacity: 1;
@@ -480,12 +486,16 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   border-radius: var(--radius-card);
   padding: 28px 26px;
   box-shadow: var(--shadow-sm);
-  transition: box-shadow 280ms var(--ease-out), transform 280ms var(--ease-out);
+  transition:
+    box-shadow 390ms var(--ease-out),
+    transform 390ms var(--ease-out),
+    border-color 390ms ease;
 }
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
-    box-shadow: var(--shadow-md);
-    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-soft);
+    transform: translateY(-6px) scale(1.035);
   }
 }
 
@@ -724,9 +734,9 @@ section[id] { scroll-margin-top: var(--nav-offset); }
 .before-after figure {
   overflow: hidden;
   transition:
-    transform 320ms var(--ease-out),
-    box-shadow 320ms var(--ease-out),
-    border-radius 320ms var(--ease-out);
+    transform 450ms var(--ease-out),
+    box-shadow 450ms var(--ease-out),
+    border-radius 450ms var(--ease-out);
 }
 .before-after figure:first-child { border-bottom-left-radius: var(--radius-card); }
 .before-after figure:last-child { border-bottom-right-radius: var(--radius-card); }
@@ -768,7 +778,7 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   background: rgba(36, 32, 27, 0.62);
   backdrop-filter: blur(3px);
   -webkit-backdrop-filter: blur(3px);
-  animation: overlay-in 240ms ease both;
+  animation: overlay-in 340ms ease both;
 }
 .modal-panel {
   position: relative;
@@ -778,10 +788,10 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   border-radius: 26px;
   box-shadow: var(--shadow-lg);
   padding: clamp(24px, 5vw, 48px);
-  animation: panel-in 380ms var(--ease-out-expo) both;
+  animation: panel-in 530ms var(--ease-out-expo) both;
 }
-.modal-overlay.is-closing { animation: overlay-out 180ms ease both; }
-.modal-overlay.is-closing .modal-panel { animation: panel-out 160ms var(--ease-out) both; }
+.modal-overlay.is-closing { animation: overlay-out 250ms ease both; }
+.modal-overlay.is-closing .modal-panel { animation: panel-out 220ms var(--ease-out) both; }
 
 @keyframes overlay-in { from { opacity: 0; } }
 @keyframes overlay-out { to { opacity: 0; } }
@@ -901,7 +911,7 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   background: rgba(28, 24, 20, 0.88);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  animation: overlay-in 240ms ease both;
+  animation: overlay-in 340ms ease both;
 }
 
 .lightbox-btn {
@@ -922,7 +932,7 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   align-self: flex-end;
   background: var(--surface);
   box-shadow: var(--shadow-sm);
-  animation: overlay-in 240ms ease both;
+  animation: overlay-in 340ms ease both;
 }
 @media (hover: hover) and (pointer: fine) {
   .lightbox-btn:hover { background: var(--accent-wash); }
@@ -948,7 +958,7 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   filter: blur(6px);
   pointer-events: none;
   /* Blur bridges the two images so the swap reads as one picture changing */
-  transition: opacity 240ms ease, filter 240ms ease;
+  transition: opacity 340ms ease, filter 340ms ease;
 }
 .lightbox-img.is-active {
   opacity: 1;
@@ -966,7 +976,7 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   border-radius: var(--radius-btn);
   background: var(--surface);
   box-shadow: var(--shadow-md);
-  animation: overlay-in 240ms ease both;
+  animation: overlay-in 340ms ease both;
 }
 .lightbox-caption {
   min-width: 72px;
@@ -978,9 +988,9 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   font-variant-numeric: tabular-nums;
 }
 
-.lightbox.is-closing .lightbox-scrim { animation: overlay-out 220ms ease both; }
+.lightbox.is-closing .lightbox-scrim { animation: overlay-out 310ms ease both; }
 .lightbox.is-closing .lightbox-close,
-.lightbox.is-closing .lightbox-bar { animation: overlay-out 140ms ease both; }
+.lightbox.is-closing .lightbox-bar { animation: overlay-out 200ms ease both; }
 .summary-file { margin-top: 16px; }
 
 /* ============================================================
@@ -1024,7 +1034,7 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   display: grid;
   place-items: center;
   color: var(--accent-dark);
-  transition: transform var(--dur-state) var(--ease-out), background-color var(--dur-state) ease;
+  transition: transform 430ms var(--ease-out), background-color 430ms ease;
 }
 .faq-item[open] .faq-chevron {
   transform: rotate(45deg);
@@ -1039,8 +1049,8 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   block-size: 0;
   overflow: hidden;
   transition:
-    block-size 280ms var(--ease-out),
-    content-visibility 280ms allow-discrete;
+    block-size 550ms var(--ease-out),
+    content-visibility 550ms allow-discrete;
 }
 .faq-item[open]::details-content { block-size: auto; }
 
@@ -1090,44 +1100,52 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   html { scroll-behavior: smooth; }
 
   .enter {
-    animation: rise 760ms var(--ease-out-expo) both;
-    animation-delay: calc(var(--i, 0) * 90ms + 120ms);
+    animation: rise 1060ms var(--ease-out-expo) both;
+    animation-delay: calc(var(--i, 0) * 130ms + 170ms);
   }
   .hero-portrait {
-    animation: portrait-reveal 1100ms var(--ease-out-expo) 80ms both;
+    animation: portrait-reveal 1540ms var(--ease-out-expo) 110ms both;
   }
   .hero-portrait img {
-    animation: portrait-settle 1400ms var(--ease-out-expo) 80ms both;
+    animation: portrait-settle 1960ms var(--ease-out-expo) 110ms both;
   }
   .hero-portrait-wrap::before {
-    animation: accent-slide 900ms var(--ease-out-expo) 560ms both;
+    animation: accent-slide 1260ms var(--ease-out-expo) 780ms both;
   }
   .hero-role {
-    animation: fade 600ms ease 900ms both;
+    animation: fade 840ms ease 1260ms both;
   }
 
   .js .timeline::before {
     transform: scaleY(0);
-    transition: transform 1400ms var(--ease-out-expo);
+    transition: transform 1960ms var(--ease-out-expo);
   }
   .js .timeline-item {
     opacity: 0;
     transform: translateY(14px);
     filter: blur(4px);
     transition:
-      opacity 600ms var(--ease-out),
-      transform 700ms var(--ease-out-expo),
-      filter 600ms var(--ease-out);
-    transition-delay: calc(var(--i, 0) * 110ms + 150ms);
+      opacity 840ms var(--ease-out),
+      transform 980ms var(--ease-out-expo),
+      filter 840ms var(--ease-out);
+    transition-delay: calc(var(--i, 0) * 150ms + 210ms);
   }
   .js .timeline.is-visible::before { transform: scaleY(1); }
   .js .timeline.is-visible .timeline-item { opacity: 1; transform: none; filter: none; }
 
-  .faq-item[open] .faq-answer { animation: answer-in 320ms var(--ease-out) both; }
+  .faq-item[open] .faq-answer { animation: answer-in 630ms var(--ease-out) both; }
 }
 
 @keyframes answer-in {
   from { opacity: 0; transform: translateY(-4px); filter: blur(4px); }
+}
+/* Touch / small screens: the answer arrives like the experience timeline items */
+@keyframes answer-rise {
+  from { opacity: 0; transform: translateY(14px); filter: blur(4px); }
+}
+@media (prefers-reduced-motion: no-preference) and (hover: none),
+  (prefers-reduced-motion: no-preference) and (max-width: 620px) {
+  .faq-item[open] .faq-answer { animation: answer-rise 1370ms var(--ease-out-expo) both; }
 }
 
 @keyframes rise {
@@ -1154,7 +1172,10 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   .modal-close:active,
   .summary-shot:active,
   .lightbox-btn:active { transform: none; }
-  .card:hover { transform: none; }
+  .card:hover,
+  .nav-links a:hover,
+  .nav-links a:has(+ a:hover),
+  .nav-links a:hover + a { transform: none; }
   .summary-shot:hover,
   .summary-shot:has(+ .summary-shot:hover),
   .summary-shot:hover + .summary-shot,

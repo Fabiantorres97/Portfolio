@@ -63,7 +63,7 @@ export default function Lightbox({ images, startIndex = 0, thumbsFrom, onClose }
       const from = thumb.getBoundingClientRect()
       const to = img.getBoundingClientRect()
       if (from.width && to.width) {
-        img.animate([flip(from, to), REST], { duration: 340, easing: EASE_OUT_EXPO })
+        img.animate([flip(from, to), REST], { duration: 480, easing: EASE_OUT_EXPO })
       }
     }
 
@@ -84,14 +84,14 @@ export default function Lightbox({ images, startIndex = 0, thumbsFrom, onClose }
     const frames = from && inViewport(from) && to.width
       ? [REST, flip(from, to)]
       : [{ opacity: 1 }, { opacity: 0 }]
-    img.animate(frames, { duration: 220, easing: EASE_OUT, fill: 'forwards' })
+    img.animate(frames, { duration: 310, easing: EASE_OUT, fill: 'forwards' })
     setClosing(true)
   }, [closing, index, thumbAt, finish])
 
   // Timer rather than animation events, so the viewer still closes if animations never run.
   useEffect(() => {
     if (!closing) return
-    const t = setTimeout(finish, 230)
+    const t = setTimeout(finish, 320)
     return () => clearTimeout(t)
   }, [closing, finish])
 
