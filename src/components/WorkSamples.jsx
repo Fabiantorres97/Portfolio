@@ -2,10 +2,18 @@ import { useRef, useState } from 'react'
 import { ArrowRight, Info } from '@phosphor-icons/react'
 import { ASANA_PRACTICE, EMAIL_SAMPLE, WORK_SAMPLES_DISCLAIMER } from '../data.js'
 import ProjectSummaryModal from './ProjectSummaryModal.jsx'
+import Lightbox from './Lightbox.jsx'
+
+const EMAIL_SHOTS = [
+  { ...EMAIL_SAMPLE.before, label: 'Before' },
+  { ...EMAIL_SAMPLE.after, label: 'After' },
+]
 
 export default function WorkSamples() {
   const [modalOpen, setModalOpen] = useState(false)
+  const [lightbox, setLightbox] = useState(null)
   const triggerRef = useRef(null)
+  const emailShotsRef = useRef(null)
 
   const closeModal = () => {
     setModalOpen(false)
@@ -58,17 +66,25 @@ export default function WorkSamples() {
           <h3>{EMAIL_SAMPLE.title}</h3>
           <p>{EMAIL_SAMPLE.paragraph}</p>
         </div>
-        <div className="before-after">
-          {[['Before', EMAIL_SAMPLE.before], ['After', EMAIL_SAMPLE.after]].map(([label, img]) => (
-            <figure key={label}>
-              <img src={img.src} width={img.w} height={img.h} alt={img.alt} loading="lazy" decoding="async" />
-              <figcaption>{label}</figcaption>
+        <div className="before-after" ref={emailShotsRef}>
+          {EMAIL_SHOTS.map((img, i) => (
+            <figure key={img.label}>
+              <button
+                type="button"
+                className="shot-btn"
+                aria-haspopup="dialog"
+                onClick={() => setLightbox({ images: EMAIL_SHOTS, startIndex: i, thumbsFrom: emailShotsRef.current })}
+              >
+                <img src={img.src} width={img.w} height={img.h} alt={img.alt} loading="lazy" decoding="async" />
+              </button>
+              <figcaption>{img.label}</figcaption>
             </figure>
           ))}
         </div>
       </article>
 
       {modalOpen && <ProjectSummaryModal onClose={closeModal} />}
+      {lightbox && <Lightbox {...lightbox} onClose={() => setLightbox(null)} />}
     </section>
   )
 }

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { DownloadSimple, X } from '@phosphor-icons/react'
 import { PROJECT_SUMMARY } from '../data.js'
+import Lightbox from './Lightbox.jsx'
 
 const FOCUSABLE = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
@@ -8,6 +9,9 @@ export default function ProjectSummaryModal({ onClose }) {
   const [closing, setClosing] = useState(false)
   const panelRef = useRef(null)
   const closeRef = useRef(null)
+  const [lightbox, setLightbox] = useState(null)
+  const lightboxRef = useRef(null)
+  lightboxRef.current = lightbox
 
   const requestClose = useCallback(() => {
     // Skip the exit animation when the user prefers reduced motion (no animationend would fire).
@@ -29,6 +33,8 @@ export default function ProjectSummaryModal({ onClose }) {
     document.body.style.paddingRight = `${scrollbar}px`
 
     const onKey = (e) => {
+      // The image viewer is a native dialog: it owns Escape and focus while open.
+      if (lightboxRef.current) return
       if (e.key === 'Escape') requestClose()
       if (e.key !== 'Tab' || !panelRef.current) return
       const items = panelRef.current.querySelectorAll(FOCUSABLE)
@@ -46,6 +52,7 @@ export default function ProjectSummaryModal({ onClose }) {
   }, [requestClose])
 
   return (
+    <>
     <div
       className={`modal-overlay${closing ? ' is-closing' : ''}`}
       onClick={(e) => { if (e.target === e.currentTarget) requestClose() }}
@@ -69,10 +76,20 @@ export default function ProjectSummaryModal({ onClose }) {
           <section className="summary-block" key={block.id} aria-labelledby={`summary-${block.id}`}>
             <h3 id={`summary-${block.id}`}>{block.title}</h3>
             <div className="summary-gallery" tabIndex={0} aria-label={`${block.title} screenshots`}>
-              {block.images.map((img) => (
-                <a key={img.src} href={img.src} target="_blank" rel="noreferrer" className="summary-shot">
+              {block.images.map((img, i) => (
+                <button
+                  key={img.src}
+                  type="button"
+                  className="summary-shot"
+                  aria-haspopup="dialog"
+                  onClick={(e) => setLightbox({
+                    images: block.images,
+                    startIndex: i,
+                    thumbsFrom: e.currentTarget.parentElement,
+                  })}
+                >
                   <img src={img.src} width={img.w} height={img.h} alt={img.alt} loading="lazy" decoding="async" />
-                </a>
+                </button>
               ))}
             </div>
             <p>{block.paragraph}</p>
@@ -88,5 +105,7 @@ export default function ProjectSummaryModal({ onClose }) {
         ))}
       </div>
     </div>
+    {lightbox && <Lightbox {...lightbox} onClose={() => setLightbox(null)} />}
+    </>
   )
 }

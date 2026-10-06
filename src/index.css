@@ -336,19 +336,23 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   transform-origin: top center;
   opacity: 0;
   transform: translateY(-6px) scale(0.98);
+  filter: blur(4px);
   visibility: hidden;
   transition:
     opacity 160ms ease,
     transform 160ms var(--ease-out),
+    filter 160ms ease,
     visibility 0s linear 160ms;
 }
 .nav-drawer.open {
   opacity: 1;
   transform: none;
+  filter: none;
   visibility: visible;
   transition:
     opacity var(--dur-state) ease,
     transform var(--dur-state) var(--ease-out),
+    filter var(--dur-state) ease,
     visibility 0s;
 }
 .nav-drawer a:not(.btn) {
@@ -704,7 +708,17 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   background: var(--surface);
 }
 .before-after img { width: 100%; }
+.shot-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+}
+.shot-btn:focus-visible { outline-offset: -4px; }
 .before-after figcaption {
+  pointer-events: none;
   position: absolute;
   top: 12px;
   left: 12px;
@@ -751,10 +765,10 @@ section[id] { scroll-margin-top: var(--nav-offset); }
 @keyframes overlay-in { from { opacity: 0; } }
 @keyframes overlay-out { to { opacity: 0; } }
 @keyframes panel-in {
-  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  from { opacity: 0; transform: translateY(12px) scale(0.97); filter: blur(6px); }
 }
 @keyframes panel-out {
-  to { opacity: 0; transform: translateY(6px) scale(0.98); }
+  to { opacity: 0; transform: translateY(6px) scale(0.98); filter: blur(4px); }
 }
 
 .modal-close {
@@ -802,15 +816,23 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   overscroll-behavior-x: contain;
-  margin: 0 0 16px;
-  padding: 2px 2px 10px;
+  /* Room for the hover magnification, which the scroll container would otherwise clip */
+  margin: -14px -12px 16px;
+  padding: 16px 12px 10px;
+  scroll-padding-inline: 12px;
   border-radius: var(--radius-img);
 }
 .summary-shot {
   flex-shrink: 0;
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
   scroll-snap-align: start;
   border-radius: var(--radius-img);
-  transition: transform var(--dur-press) var(--ease-out);
+  transform-origin: bottom center;
+  transition: transform var(--dur-state) var(--ease-out);
 }
 .summary-shot:active { transform: scale(0.98); }
 .summary-shot img {
@@ -822,8 +844,122 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   transition: box-shadow var(--dur-state) ease;
 }
 @media (hover: hover) and (pointer: fine) {
+  /* Dock-style magnification: the hovered shot grows, its neighbours follow slightly */
+  .summary-shot:hover { transform: scale(1.06); z-index: 1; }
+  .summary-shot:has(+ .summary-shot:hover),
+  .summary-shot:hover + .summary-shot { transform: scale(1.02); }
   .summary-shot:hover img { box-shadow: var(--shadow-md); }
 }
+
+/* ============================================================
+   LIGHTBOX: image viewer (shared element from thumbnail, crossfade between images)
+   ============================================================ */
+.lightbox[open] {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 12px 16px 16px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+}
+.lightbox::backdrop { background: transparent; }
+.lightbox :focus-visible { outline-color: var(--accent-soft); }
+
+.lightbox-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(28, 24, 20, 0.88);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: overlay-in 240ms ease both;
+}
+
+.lightbox-btn {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-state) ease;
+}
+.lightbox-btn:active { transform: scale(0.94); }
+.lightbox-close {
+  align-self: flex-end;
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  animation: overlay-in 240ms ease both;
+}
+@media (hover: hover) and (pointer: fine) {
+  .lightbox-btn:hover { background: var(--accent-wash); }
+  .lightbox-close:hover { background: var(--surface-alt); }
+}
+
+.lightbox-stage {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+}
+.lightbox-img {
+  grid-area: 1 / 1;
+  width: auto;
+  max-width: 100%;
+  max-height: calc(100dvh - 156px);
+  border-radius: var(--radius-img);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  opacity: 0;
+  filter: blur(6px);
+  pointer-events: none;
+  /* Blur bridges the two images so the swap reads as one picture changing */
+  transition: opacity 240ms ease, filter 240ms ease;
+}
+.lightbox-img.is-active {
+  opacity: 1;
+  filter: none;
+  pointer-events: auto;
+}
+
+.lightbox-bar {
+  position: relative;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px;
+  border-radius: var(--radius-btn);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  animation: overlay-in 240ms ease both;
+}
+.lightbox-caption {
+  min-width: 72px;
+  padding: 0 10px;
+  text-align: center;
+  font-weight: 700;
+  font-size: var(--text-small);
+  line-height: 44px;
+  font-variant-numeric: tabular-nums;
+}
+
+.lightbox.is-closing .lightbox-scrim { animation: overlay-out 220ms ease both; }
+.lightbox.is-closing .lightbox-close,
+.lightbox.is-closing .lightbox-bar { animation: overlay-out 140ms ease both; }
 .summary-file { margin-top: 16px; }
 
 /* ============================================================
@@ -956,13 +1092,21 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   .js .timeline-item {
     opacity: 0;
     transform: translateY(14px);
+    filter: blur(4px);
     transition:
       opacity 600ms var(--ease-out),
-      transform 700ms var(--ease-out-expo);
+      transform 700ms var(--ease-out-expo),
+      filter 600ms var(--ease-out);
     transition-delay: calc(var(--i, 0) * 110ms + 150ms);
   }
   .js .timeline.is-visible::before { transform: scaleY(1); }
-  .js .timeline.is-visible .timeline-item { opacity: 1; transform: none; }
+  .js .timeline.is-visible .timeline-item { opacity: 1; transform: none; filter: none; }
+
+  .faq-item[open] .faq-answer { animation: answer-in 320ms var(--ease-out) both; }
+}
+
+@keyframes answer-in {
+  from { opacity: 0; transform: translateY(-4px); filter: blur(4px); }
 }
 
 @keyframes rise {
@@ -987,11 +1131,16 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   .btn:active,
   .nav-burger:active,
   .modal-close:active,
-  .summary-shot:active { transform: none; }
+  .summary-shot:active,
+  .lightbox-btn:active { transform: none; }
   .card:hover { transform: none; }
+  .summary-shot:hover,
+  .summary-shot:has(+ .summary-shot:hover),
+  .summary-shot:hover + .summary-shot { transform: none; }
   .modal-panel { animation: overlay-in 160ms ease both; }
   .nav-drawer,
-  .nav-drawer.open { transform: none; }
+  .nav-drawer.open { transform: none; filter: none; }
+  .lightbox-img { filter: none; transition: opacity 160ms ease; }
   .faq-item::details-content { transition: none; }
 }
 
