@@ -655,6 +655,22 @@ section[id] { scroll-margin-top: var(--nav-offset); }
 }
 .samples-note svg { flex-shrink: 0; margin-top: 2px; }
 
+.samples-group + .samples-group { margin-top: 56px; }
+.samples-group-title {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+  font-size: var(--text-subheading);
+  color: var(--ink-secondary);
+}
+.samples-group-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
 .sample-card {
   background: var(--surface);
   border: 1px solid var(--border);
@@ -669,18 +685,54 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   display: grid;
   grid-template-columns: 0.95fr 1.05fr;
 }
+/* The feature card does not clip, so its image can lift out of the frame on hover.
+   The media rounds its own outer corners instead. */
+.sample-card--feature { overflow: visible; }
 .sample-media {
+  position: relative;
   background: var(--surface-alt);
   min-height: 260px;
+  overflow: hidden;
+  border-radius: var(--radius-card) 0 0 var(--radius-card);
+  transition:
+    transform 450ms var(--ease-out),
+    box-shadow 450ms var(--ease-out),
+    border-radius 450ms var(--ease-out);
 }
 .sample-media img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Shows the whole image (no crop), centred in the media column; only the image lifts */
+.sample-media--fit {
+  display: flex;
+  align-items: center;
+  overflow: visible;
+}
+.sample-media--fit .shot-btn { position: relative; }
+.sample-media--fit img {
+  height: auto;
+  transition:
+    transform 450ms var(--ease-out),
+    box-shadow 450ms var(--ease-out),
+    border-radius 450ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .sample-media:not(.sample-media--fit):hover,
+  .sample-media--fit .shot-btn:hover img {
+    transform: scale(1.05);
+    z-index: 1;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-lg);
+  }
+  .sample-media--fit .shot-btn:hover { z-index: 1; }
+}
 .sample-body {
   padding: clamp(28px, 4vw, 44px);
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-.sample-body h3 {
+.sample-body h4 {
   font-size: 1.4rem;
   margin-bottom: 16px;
 }
@@ -694,7 +746,8 @@ section[id] { scroll-margin-top: var(--nav-offset); }
 .sample-body .btn { margin-top: 22px; align-self: flex-start; }
 
 .sample-card--email .sample-body { padding-bottom: 28px; }
-.badge-real {
+.badge-sample {
+  display: inline-block;
   align-self: flex-start;
   background: var(--ink);
   color: var(--bg);
@@ -990,8 +1043,136 @@ section[id] { scroll-margin-top: var(--nav-offset); }
 
 .lightbox.is-closing .lightbox-scrim { animation: overlay-out 310ms ease both; }
 .lightbox.is-closing .lightbox-close,
-.lightbox.is-closing .lightbox-bar { animation: overlay-out 200ms ease both; }
+.lightbox.is-closing .lightbox-bar,
+.lightbox.is-closing .lightbox-desc { animation: overlay-out 200ms ease both; }
+
+.lightbox-desc {
+  position: relative;
+  align-self: center;
+  max-width: 68ch;
+  text-align: center;
+  color: var(--bg);
+  font-size: var(--text-small);
+  line-height: 1.5;
+  animation: overlay-in 340ms ease both;
+}
+/* Room for a caption of up to three lines under the image */
+.lightbox.has-desc .lightbox-img { max-height: calc(100dvh - 236px); }
 .summary-file { margin-top: 16px; }
+
+.modal-head .badge-sample { margin-bottom: 12px; }
+.summary-block code {
+  font-family: ui-monospace, SFMono-Regular, Consolas, monospace;
+  font-size: 0.88em;
+  color: var(--ink);
+  background: var(--surface-alt);
+  border-radius: 6px;
+  padding: 1px 6px;
+  white-space: nowrap;
+}
+
+/* Study Tracker Bot: flow diagram */
+.flow {
+  display: grid;
+  grid-template-columns: 1fr 1.35fr 1fr 1fr;
+  gap: 32px;
+  margin-top: 22px;
+  counter-reset: none;
+}
+.flow-node {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card-sm);
+  box-shadow: var(--shadow-sm);
+  padding: 14px 16px;
+}
+.flow-node--n8n {
+  border-color: var(--accent-soft);
+  background: linear-gradient(var(--accent-wash), var(--accent-wash)), var(--surface);
+}
+.flow-node:not(:last-child)::after {
+  content: '\2192' / '';
+  position: absolute;
+  top: 50%;
+  right: -24px;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+.flow-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.flow-head svg { color: var(--accent); flex-shrink: 0; }
+.flow-steps li {
+  font-size: var(--text-caption);
+  color: var(--ink-secondary);
+  line-height: 1.45;
+}
+.flow-steps li + li { margin-top: 4px; }
+.flow-node--n8n .flow-steps li {
+  position: relative;
+  padding-left: 14px;
+}
+.flow-node--n8n .flow-steps li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 7px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+/* Study Tracker Bot: screenshots */
+.bot-shots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 22px 18px;
+  align-items: start;
+}
+.bot-shot--wide { grid-column: 1 / -1; }
+.bot-shot-btn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: zoom-in;
+  border-radius: var(--radius-img);
+  position: relative;
+  transition: transform 450ms var(--ease-out);
+}
+.bot-shot-btn:active { transform: scale(0.98); }
+@media (hover: hover) and (pointer: fine) {
+  .bot-shot-btn:hover { transform: scale(1.03); z-index: 1; }
+}
+.bot-shot-btn img {
+  width: 100%;
+  border-radius: var(--radius-img);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--dur-state) ease;
+}
+@media (hover: hover) and (pointer: fine) {
+  .bot-shot-btn:hover img { box-shadow: var(--shadow-md); }
+}
+.bot-shot figcaption {
+  margin-top: 8px;
+  font-size: var(--text-caption);
+  line-height: 1.5;
+  color: var(--muted-text);
+}
 
 /* ============================================================
    FAQ
@@ -1171,6 +1352,7 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   .nav-burger:active,
   .modal-close:active,
   .summary-shot:active,
+  .bot-shot-btn:active,
   .lightbox-btn:active { transform: none; }
   .card:hover,
   .nav-links a:hover,
@@ -1179,7 +1361,10 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   .summary-shot:hover,
   .summary-shot:has(+ .summary-shot:hover),
   .summary-shot:hover + .summary-shot,
-  .before-after figure:hover { transform: none; }
+  .before-after figure:hover,
+  .sample-media:hover,
+  .sample-media--fit .shot-btn:hover img,
+  .bot-shot-btn:hover { transform: none; }
   .modal-panel { animation: overlay-in 160ms ease both; }
   .nav-drawer,
   .nav-drawer.open { transform: none; filter: none; }
@@ -1206,9 +1391,25 @@ section[id] { scroll-margin-top: var(--nav-offset); }
   .hero-portrait-wrap::before { inset: 14px -14px 34px 14px; }
   .sample-card--feature { grid-template-columns: 1fr; }
   .sample-media { min-height: 0; aspect-ratio: 3 / 2; }
+  .sample-media { border-radius: var(--radius-card) var(--radius-card) 0 0; }
+  .sample-media--fit { aspect-ratio: auto; }
+  .sample-media--fit img { border-radius: var(--radius-card) var(--radius-card) 0 0; }
+}
+
+@media (max-width: 760px) {
+  .flow { grid-template-columns: 1fr; gap: 30px; }
+  .flow-node:not(:last-child)::after {
+    content: '\2193' / '';
+    top: auto;
+    right: auto;
+    left: 50%;
+    bottom: -25px;
+    transform: translateX(-50%);
+  }
 }
 
 @media (max-width: 620px) {
+  .bot-shots { grid-template-columns: 1fr; }
   :root { --nav-offset: 84px; }
   .grid--3, .grid--4 { grid-template-columns: 1fr; }
   .before-after { grid-template-columns: 1fr; }

@@ -106,7 +106,7 @@ export default function Lightbox({ images, startIndex = 0, thumbsFrom, onClose }
   return (
     <dialog
       ref={dialogRef}
-      className={`lightbox${closing ? ' is-closing' : ''}`}
+      className={`lightbox${closing ? ' is-closing' : ''}${images.some((img) => img.caption) ? ' has-desc' : ''}`}
       aria-label="Image viewer"
       onCancel={(e) => { e.preventDefault(); requestClose() }}
       onClose={() => { if (!dialogRef.current?.open) finish() }}
@@ -134,6 +134,8 @@ export default function Lightbox({ images, startIndex = 0, thumbsFrom, onClose }
           />
         ))}
       </div>
+
+      {images[index].caption && <p className="lightbox-desc">{images[index].caption}</p>}
 
       {caption && (
         <div className="lightbox-bar">
